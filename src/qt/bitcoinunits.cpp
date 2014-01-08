@@ -11,9 +11,8 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(BTC);
-    unitlist.append(mBTC);
-    unitlist.append(uBTC);
+
+    unitlist.append(MYM);
     return unitlist;
 }
 
@@ -21,9 +20,8 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case BTC:
-    case mBTC:
-    case uBTC:
+
+    case MYM:
         return true;
     default:
         return false;
@@ -34,9 +32,8 @@ QString BitcoinUnits::name(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("PPC");
-    case mBTC: return QString("mPPC");
-    case uBTC: return QString::fromUtf8("μPPC");
+
+    case MYM: return QString::fromUtf8("MYM");
     default: return QString("???");
     }
 }
@@ -45,9 +42,8 @@ QString BitcoinUnits::description(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("PPCoins");
-    case mBTC: return QString("Milli-PPCoins (1 / 1,000)");
-    case uBTC: return QString("Micro-PPCoins (1 / 1,000,000)");
+
+    case MYM: return QString("Moneyenom");
     default: return QString("???");
     }
 }
@@ -56,10 +52,9 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case BTC:  return 1000000;
-    case mBTC: return 1000;
-    case uBTC: return 1;
-    default:   return 1000000;
+
+    case MYM: return 1;
+    default:   return 1;
     }
 }
 
@@ -67,9 +62,8 @@ int BitcoinUnits::amountDigits(int unit)
 {
     switch(unit)
     {
-    case BTC: return 10; // 21,000,000 (# digits, without commas)
-    case mBTC: return 13; // 21,000,000,000
-    case uBTC: return 16; // 21,000,000,000,000
+
+    case MYM: return 18; 
     default: return 0;
     }
 }
@@ -78,9 +72,8 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case BTC: return 6;
-    case mBTC: return 3;
-    case uBTC: return 0;
+
+    case MYM: return 0;
     default: return 0;
     }
 }
