@@ -63,7 +63,7 @@ int BitcoinUnits::amountDigits(int unit)
     switch(unit)
     {
 
-    case MYM: return 17; 
+    case MYM: return 17; // 92.000.000.000.000
     default: return 0;
     }
 }
