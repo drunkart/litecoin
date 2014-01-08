@@ -19,7 +19,7 @@ class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    TxViewDelegate(): QAbstractItemDelegate(), unit(BitcoinUnits::BTC)
+    TxViewDelegate(): QAbstractItemDelegate(), unit(BitcoinUnits::MYM)
     {
 
     }
@@ -104,7 +104,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->labelBalance->setToolTip(tr("Your current balance"));
     ui->labelBalance->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard);
 
-    // ppcoin: stake: <stake>
+    // moneyenom: stake: <stake>
     ui->labelStake->setFont(QFont("Monospace", -1, QFont::Bold));
     ui->labelStake->setToolTip(tr("Your current stake"));
     ui->labelStake->setTextInteractionFlags(Qt::TextSelectableByMouse|Qt::TextSelectableByKeyboard);
