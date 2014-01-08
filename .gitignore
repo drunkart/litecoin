@@ -1,7 +1,7 @@
 src/*.exe
-src/ppcoin
-src/ppcoind
-src/test_ppcoin
+src/moneyenom
+src/moneyenomd
+src/test_moneyenom
 src/build.h
 .*.swp
 *.*~*
@@ -10,7 +10,7 @@ src/build.h
 *.orig
 *.o
 *.patch
-.ppcoin
+.moneyenom
 #compilation and Qt preprocessor part
 *.qm
 Makefile
