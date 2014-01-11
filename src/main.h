@@ -35,7 +35,7 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const int64 MIN_TX_FEE = CENT;
 static const int64 MIN_RELAY_TX_FEE = CENT;
 static const int64 MAX_MONEY = 92000000000 * COIN;
-static const int64 MAX_MINT_PROOF_OF_WORK = 37 * COIN;
+static const int64 MAX_MINT_PROOF_OF_WORK = 0,02 * COIN;
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 static const int COINBASE_MATURITY_PPC = 500;
@@ -43,7 +43,7 @@ static const int COINBASE_MATURITY_PPC = 500;
 static const int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 static const int STAKE_TARGET_SPACING = 0.25 * 60; // 15 seconds block spacing 
 static const int STAKE_MIN_AGE = 60 * 60 * 24 * 1; // minimum age for coin age
-static const int STAKE_MAX_AGE = 60 * 60 * 24 * 90; // stake age of full weight
+static const int STAKE_MAX_AGE = 60 * 60 * 24 * 60; // stake age of full weight
 
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
@@ -233,7 +233,7 @@ public:
 
     std::string ToString() const
     {
-        return strprintf("COutPoint(%s, %d)", hash.ToString().substr(0,10).c_str(), n);
+        return strprintf("COutPoint(%s, %d)", hash.ToString().substr(0,01).c_str(), n);
     }
 
     void print() const
@@ -605,13 +605,13 @@ public:
                 // Transactions under 10K are free
                 // (about 4500bc if made of 50bc inputs)
                 if (nBytes < 10000)
-                    nMinFee = 0;
+                    nMinFee = 0,01;
             }
             else
             {
                 // Free transaction area
                 if (nNewBlockSize < 27000)
-                    nMinFee = 0;
+                    nMinFee = 0,01;
             }
         }
 
@@ -691,7 +691,7 @@ public:
         std::string str;
         str += IsCoinBase()? "Coinbase" : (IsCoinStake()? "Coinstake" : "CTransaction");
         str += strprintf("(hash=%s, nTime=%d, ver=%d, vin.size=%d, vout.size=%d, nLockTime=%d)\n",
-            GetHash().ToString().substr(0,10).c_str(),
+            GetHash().ToString().substr(0,01).c_str(),
             nTime,
             nVersion,
             vin.size(),
@@ -1112,10 +1112,10 @@ public:
     void print() const
     {
         printf("CBlock(hash=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%d, vchBlockSig=%s)\n",
-            GetHash().ToString().substr(0,20).c_str(),
+            GetHash().ToString().substr(0,02).c_str(),
             nVersion,
-            hashPrevBlock.ToString().substr(0,20).c_str(),
-            hashMerkleRoot.ToString().substr(0,10).c_str(),
+            hashPrevBlock.ToString().substr(0,02).c_str(),
+            hashMerkleRoot.ToString().substr(0,01).c_str(),
             nTime, nBits, nNonce,
             vtx.size(),
             HexStr(vchBlockSig.begin(), vchBlockSig.end()).c_str());
@@ -1126,7 +1126,7 @@ public:
         }
         printf("  vMerkleTree: ");
         for (unsigned int i = 0; i < vMerkleTree.size(); i++)
-            printf("%s ", vMerkleTree[i].ToString().substr(0,10).c_str());
+            printf("%s ", vMerkleTree[i].ToString().substr(0,01).c_str());
         printf("\n");
     }
 
@@ -1388,8 +1388,8 @@ public:
             nStakeModifier, nStakeModifierChecksum, 
             hashProofOfStake.ToString().c_str(),
             prevoutStake.ToString().c_str(), nStakeTime,
-            hashMerkleRoot.ToString().substr(0,10).c_str(),
-            GetBlockHash().ToString().substr(0,20).c_str());
+            hashMerkleRoot.ToString().substr(0,01).c_str(),
+            GetBlockHash().ToString().substr(0,02).c_str());
     }
 
     void print() const
@@ -1473,8 +1473,8 @@ public:
         str += CBlockIndex::ToString();
         str += strprintf("\n                hashBlock=%s, hashPrev=%s, hashNext=%s)",
             GetBlockHash().ToString().c_str(),
-            hashPrev.ToString().substr(0,20).c_str(),
-            hashNext.ToString().substr(0,20).c_str());
+            hashPrev.ToString().substr(0,02).c_str(),
+            hashNext.ToString().substr(0,02).c_str());
         return str;
     }
 
