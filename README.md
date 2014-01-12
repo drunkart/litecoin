@@ -4,7 +4,7 @@
 
 - - subsidy halves in 840k blocks (~4 years)
 
-- - ~1 googol coins
+- - 1 googol coins
 
 -
 
