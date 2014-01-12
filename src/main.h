@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
-// Copyright (c) 2011-2013 The PPCoin developers
+// Copyright (c) 2011-2013 The Moneyenom developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_MAIN_H
@@ -35,13 +35,13 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const int64 MIN_TX_FEE = CENT;
 static const int64 MIN_RELAY_TX_FEE = CENT;
 static const int64 MAX_MONEY = 92000000000 * COIN;
-static const int64 MAX_MINT_PROOF_OF_WORK = 0,02 * COIN;
+static const int64 MAX_MINT_PROOF_OF_WORK = 1 * COIN;
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
-static const int COINBASE_MATURITY_PPC = 500;
+static const int COINBASE_MATURITY_MYM = 500;
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
 static const int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
-static const int STAKE_TARGET_SPACING = 0.25 * 60; // 15 seconds block spacing 
+static const int STAKE_TARGET_SPACING = 0.25 * 60; // 15seconds block spacing 
 static const int STAKE_MIN_AGE = 60 * 60 * 24 * 1; // minimum age for coin age
 static const int STAKE_MAX_AGE = 60 * 60 * 24 * 60; // stake age of full weight
 
@@ -233,7 +233,7 @@ public:
 
     std::string ToString() const
     {
-        return strprintf("COutPoint(%s, %d)", hash.ToString().substr(0,01).c_str(), n);
+        return strprintf("COutPoint(%s, %d)", hash.ToString().substr(0,10).c_str(), n);
     }
 
     void print() const
@@ -527,7 +527,7 @@ public:
 
     bool IsCoinStake() const
     {
-        // ppcoin: the coin stake transaction is marked with the first output empty
+        // moneyenom: the coin stake transaction is marked with the first output empty
         return (vin.size() > 0 && (!vin[0].prevout.IsNull()) && vout.size() >= 2 && vout[0].IsEmpty());
     }
 
@@ -605,13 +605,13 @@ public:
                 // Transactions under 10K are free
                 // (about 4500bc if made of 50bc inputs)
                 if (nBytes < 10000)
-                    nMinFee = 0,01;
+                    nMinFee = 0;
             }
             else
             {
                 // Free transaction area
                 if (nNewBlockSize < 27000)
-                    nMinFee = 0,01;
+                    nMinFee = 0;
             }
         }
 
@@ -691,7 +691,7 @@ public:
         std::string str;
         str += IsCoinBase()? "Coinbase" : (IsCoinStake()? "Coinstake" : "CTransaction");
         str += strprintf("(hash=%s, nTime=%d, ver=%d, vin.size=%d, vout.size=%d, nLockTime=%d)\n",
-            GetHash().ToString().substr(0,01).c_str(),
+            GetHash().ToString().substr(0,10).c_str(),
             nTime,
             nVersion,
             vin.size(),
@@ -746,7 +746,7 @@ public:
     bool ClientConnectInputs();
     bool CheckTransaction() const;
     bool AcceptToMemoryPool(CTxDB& txdb, bool fCheckInputs=true, bool* pfMissingInputs=NULL);
-    bool GetCoinAge(CTxDB& txdb, uint64& nCoinAge) const;  // ppcoin: get transaction coin age
+    bool GetCoinAge(CTxDB& txdb, uint64& nCoinAge) const;  // moneyenom: get transaction coin age
 
 protected:
     const CTxOut& GetOutputFor(const CTxIn& input, const MapPrevTx& inputs) const;
@@ -890,7 +890,7 @@ public:
     // network and disk
     std::vector<CTransaction> vtx;
 
-    // ppcoin: block signature - signed by coin base txout[0]'s owner
+    // moneyenom: block signature - signed by coin base txout[0]'s owner
     std::vector<unsigned char> vchBlockSig;
 
     // memory only
@@ -959,7 +959,7 @@ public:
 
     void UpdateTime(const CBlockIndex* pindexPrev);
 
-    // ppcoin: entropy bit for stake modifier if chosen by modifier
+    // moneyenom: entropy bit for stake modifier if chosen by modifier
     unsigned int GetStakeEntropyBit() const
     {
         uint160 hashSig = Hash160(vchBlockSig);
@@ -971,7 +971,7 @@ public:
         return hashSig.Get64();
     }
 
-    // ppcoin: two types of block: proof-of-work or proof-of-stake
+    // moneyenom: two types of block: proof-of-work or proof-of-stake
     bool IsProofOfStake() const
     {
         return (vtx.size() > 1 && vtx[1].IsCoinStake());
@@ -987,7 +987,7 @@ public:
         return IsProofOfStake()? std::make_pair(vtx[1].vin[0].prevout, vtx[1].nTime) : std::make_pair(COutPoint(), (unsigned int)0);
     }
 
-    // ppcoin: get max transaction timestamp
+    // moneyenom: get max transaction timestamp
     int64 GetMaxTransactionTime() const
     {
         int64 maxTransactionTime = 0;
@@ -1112,10 +1112,10 @@ public:
     void print() const
     {
         printf("CBlock(hash=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%d, vchBlockSig=%s)\n",
-            GetHash().ToString().substr(0,02).c_str(),
+            GetHash().ToString().substr(0,20).c_str(),
             nVersion,
-            hashPrevBlock.ToString().substr(0,02).c_str(),
-            hashMerkleRoot.ToString().substr(0,01).c_str(),
+            hashPrevBlock.ToString().substr(0,20).c_str(),
+            hashMerkleRoot.ToString().substr(0,10).c_str(),
             nTime, nBits, nNonce,
             vtx.size(),
             HexStr(vchBlockSig.begin(), vchBlockSig.end()).c_str());
@@ -1126,7 +1126,7 @@ public:
         }
         printf("  vMerkleTree: ");
         for (unsigned int i = 0; i < vMerkleTree.size(); i++)
-            printf("%s ", vMerkleTree[i].ToString().substr(0,01).c_str());
+            printf("%s ", vMerkleTree[i].ToString().substr(0,10).c_str());
         printf("\n");
     }
 
@@ -1138,7 +1138,7 @@ public:
     bool AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos);
     bool CheckBlock() const;
     bool AcceptBlock();
-    bool GetCoinAge(uint64& nCoinAge) const; // ppcoin: calculate total coin age spent in block
+    bool GetCoinAge(uint64& nCoinAge) const; // moneyenom: calculate total coin age spent in block
     bool SignBlock(const CKeyStore& keystore);
     bool CheckBlockSignature() const;
 
@@ -1166,12 +1166,12 @@ public:
     CBlockIndex* pnext;
     unsigned int nFile;
     unsigned int nBlockPos;
-    CBigNum bnChainTrust; // ppcoin: trust score of block chain
+    CBigNum bnChainTrust; // moneyenom: trust score of block chain
     int nHeight;
     int64 nMint;
     int64 nMoneySupply;
 
-    unsigned int nFlags;  // ppcoin: block index flags
+    unsigned int nFlags;  // moneyenom: block index flags
     enum  
     {
         BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
@@ -1388,8 +1388,8 @@ public:
             nStakeModifier, nStakeModifierChecksum, 
             hashProofOfStake.ToString().c_str(),
             prevoutStake.ToString().c_str(), nStakeTime,
-            hashMerkleRoot.ToString().substr(0,01).c_str(),
-            GetBlockHash().ToString().substr(0,02).c_str());
+            hashMerkleRoot.ToString().substr(0,10).c_str(),
+            GetBlockHash().ToString().substr(0,20).c_str());
     }
 
     void print() const
@@ -1473,8 +1473,8 @@ public:
         str += CBlockIndex::ToString();
         str += strprintf("\n                hashBlock=%s, hashPrev=%s, hashNext=%s)",
             GetBlockHash().ToString().c_str(),
-            hashPrev.ToString().substr(0,02).c_str(),
-            hashNext.ToString().substr(0,02).c_str());
+            hashPrev.ToString().substr(0,20).c_str(),
+            hashNext.ToString().substr(0,20).c_str());
         return str;
     }
 
