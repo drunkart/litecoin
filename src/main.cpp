@@ -2242,7 +2242,7 @@ bool LoadBlockIndex(bool fAllowNew)
         //   vMerkleTree: 4a5e1e
 
         // Genesis block
-        const char* pszTimestamp = "Matonis 07-AUG-2012 Parallel Currencies And The Roadmap To Monetary Freedom";
+        const char* pszTimestamp = "http://www.popsci.com/article/technology/ibm-backs-watson-1-billion-and-new-business-division?dom=PSC&loc=recent&lnk=10&con=IMG";
         CTransaction txNew;
         txNew.nTime = 1345083810;
         txNew.vin.resize(1);
@@ -2254,13 +2254,13 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1345084287;
+        block.nTime    = 1389626448;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 2179302059u;
 
         if (fTestNet)
         {
-            block.nTime    = 1345090000;
+            block.nTime    = 1389626448;
             block.nNonce   = 122894938;
         }
 
